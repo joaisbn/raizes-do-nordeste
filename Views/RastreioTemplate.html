@@ -1,0 +1,35 @@
+<div class="animate-fade-in text-center py-6">
+      <div class="inline-block bg-green-100 text-green-600 p-3 rounded-full mb-4">
+        <span class="material-symbols-outlined text-4xl">check_circle</span>
+      </div>
+      <h2 class="text-2xl font-bold text-brand-dark mb-1">Pagamento Aprovado!</h2>
+      <p class="text-gray-500 mb-8">Pedido <strong class="text-brand-primary">#RN-{{ store.numeroPedido }}</strong></p>
+
+      <div class="max-w-xs mx-auto text-left relative border-l-2 border-gray-200 ml-8 space-y-8">
+        <div class="relative pl-6">
+          <div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full border-4 border-white"
+            :class="store.statusRastreio >= 0 ? 'bg-brand-primary' : 'bg-gray-300'"></div>
+          <h4 class="font-bold text-sm" :class="store.statusRastreio >= 0 ? 'text-brand-dark' : 'text-gray-400'">Pedido Recebido</h4>
+          <p class="text-xs text-gray-500">Aguardando início do preparo.</p>
+        </div>
+
+        <div class="relative pl-6">
+          <div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full border-4 border-white"
+            :class="store.statusRastreio >= 1 ? 'bg-amber-500' : 'bg-gray-300'"></div>
+          <h4 class="font-bold text-sm" :class="store.statusRastreio >= 1 ? 'text-brand-dark' : 'text-gray-400'">Em Preparo</h4>
+          <p class="text-xs text-gray-500">{{ store.statusRastreio === 1 ? 'A cozinha já está preparando sua refeição...' : (store.statusRastreio > 1 ? 'Preparo finalizado.' : 'Aguardando.') }}</p>
+        </div>
+
+        <div class="relative pl-6">
+          <div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full border-4 border-white"
+            :class="store.statusRastreio >= 2 ? 'bg-green-500' : 'bg-gray-300'"></div>
+          <h4 class="font-bold text-sm" :class="store.statusRastreio >= 2 ? 'text-green-600' : 'text-gray-400'">Pronto para Retirada</h4>
+          <p class="text-xs text-gray-500 font-semibold" v-if="store.statusRastreio >= 2">Dirija-se ao balcão com sua senha!</p>
+        </div>
+      </div>
+
+      <router-link to="/"
+        class="mt-12 inline-block w-full max-w-xs bg-gray-100 hover:bg-gray-200 text-brand-dark font-bold py-3 rounded-xl transition-colors">
+        Voltar ao Início
+      </router-link>
+    </div>

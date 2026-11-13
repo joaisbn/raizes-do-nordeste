@@ -1,0 +1,58 @@
+<div>
+  <nav class="flex overflow-x-auto gap-2 pb-2 mb-4 scrollbar-hide md:mb-6">
+    <button @click="store.selectedCategoria = 'todos'"
+      :class="['px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-semibold transition-colors border', 
+               store.selectedCategoria === 'todos' ? 'bg-brand-primary text-white border-brand-primary' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']">
+      Todos
+    </button>
+    <button v-for="cat in store.menuData.categorias" :key="cat.id" @click="store.selectedCategoria = cat.id"
+      :class="['px-4 py-1.5 rounded-full whitespace-nowrap text-sm font-semibold transition-colors border', 
+               store.selectedCategoria === cat.id ? 'bg-brand-primary text-white border-brand-primary' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50']">
+      {{ cat.nome }}
+    </button>
+  </nav>
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+    <article v-for="produto in produtosFiltrados" :key="produto.id"
+      class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col relative group">
+
+      <button @click="store.toggleFavorito(produto.id)"
+        class="absolute top-2 left-2 z-10 bg-white/80 backdrop-blur p-1.5 rounded-full shadow-sm hover:scale-110 transition-transform">
+        <span class="material-symbols-outlined text-lg transition-colors"
+          :style="store.favoritos.includes(produto.id) ? 'font-variation-settings: \'FILL\' 1; color: #ef4444;' : 'color: #9ca3af;'">favorite</span>
+      </button>
+
+      <div class="h-40 md:h-48 bg-gray-200 relative overflow-hidden flex items-center justify-center">
+        <img v-if="produto.imagem" :src="produto.imagem" :alt="produto.nome"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          @error="$event.target.style.display='none'; $event.target.nextElementSibling.style.display='flex'" />
+        <div :class="produto.imagem ? 'hidden' : 'flex'"
+          class="w-full h-full absolute inset-0 items-center justify-center bg-gray-100">
+          <span class="text-gray-400 font-medium text-sm flex flex-col items-center">
+            <span class="material-symbols-outlined mb-1 opacity-50">image_not_supported</span>
+            Sem Imagem
+          </span>
+        </div>
+        <span v-if="produto.sazonal"
+          class="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded shadow">Especial</span>
+      </div>
+
+      <div class="p-4 flex flex-col flex-grow">
+        <h3 class="font-bold text-brand-dark text-base md:text-lg leading-tight mb-1">{{ produto.nome }}</h3>
+        <p class="text-xs md:text-sm text-gray-500 mb-4 line-clamp-2 flex-grow">{{ produto.descricao }}</p>
+        <div class="flex justify-between items-center mt-auto">
+          <span class="font-bold text-brand-primary text-lg">R$ {{ store.formatarPreco(produto.preco) }}</span>
+          <button @click="store.adicionarAoCarrinho(produto)"
+            class="bg-brand-primary/10 text-brand-primary hover:bg-brand-primary hover:text-white p-2 rounded-lg transition-colors">
+            <span class="material-symbols-outlined">add</span>
+          </button>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <div v-if="produtosFiltrados.length === 0" class="text-center py-16 text-gray-500">
+    <span class="material-symbols-outlined text-5xl mb-2 opacity-30">search_off</span>
+    <p class="text-lg">Nenhum produto encontrado nesta categoria.</p>
+  </div>
+</div>

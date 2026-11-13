@@ -1,0 +1,32 @@
+<div>
+  <h2 class="text-xl font-bold text-brand-dark mb-4 border-b pb-2">Meus Favoritos</h2>
+
+  <div v-if="produtosFavoritos.length === 0" class="text-center py-10 text-gray-500">
+    <span class="material-symbols-outlined text-4xl mb-2 opacity-50">favorite</span>
+    <p>Você ainda não tem pratos favoritos.</p>
+  </div>
+
+  <div class="space-y-3">
+    <div v-for="produto in produtosFavoritos" :key="produto.id"
+      class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex items-center gap-3">
+      <div class="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden shrink-0">
+        <img v-if="produto.imagem" :src="produto.imagem" class="w-full h-full object-cover"
+          @error="$event.target.style.display='none'">
+      </div>
+      <div class="flex-1">
+        <h4 class="font-bold text-sm text-brand-dark leading-tight">{{ produto.nome }}</h4>
+        <span class="text-brand-primary font-bold text-sm">R$ {{ store.formatarPreco(produto.preco) }}</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button @click="store.toggleFavorito(produto.id)"
+          class="bg-red-50 text-red-500 hover:bg-red-100 p-2 rounded-lg transition-colors">
+          <span class="material-symbols-outlined text-xl">delete</span>
+        </button>
+        <button @click="store.adicionarAoCarrinho(produto)"
+          class="bg-brand-primary hover:bg-brand-dark text-white p-2 rounded-lg transition-colors">
+          <span class="material-symbols-outlined text-xl">add_shopping_cart</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

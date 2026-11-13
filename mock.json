@@ -1,0 +1,159 @@
+{
+  "unidades": [
+    {
+      "id": "rec-01",
+      "nome": "Recife - Boa Viagem",
+      "tipo_cozinha": "completa",
+      "cidade": "Recife",
+      "estado": "PE",
+      "endereco": "Av. Boa Viagem, 1500",
+      "ativa": true
+    },
+    {
+      "id": "rec-02",
+      "nome": "Recife - Derby (Quiosque)",
+      "tipo_cozinha": "reduzida",
+      "cidade": "Recife",
+      "estado": "PE",
+      "endereco": "Praça do Derby, s/n",
+      "ativa": true
+    },
+    {
+      "id": "rio-01",
+      "nome": "Rio de Janeiro - Centro",
+      "tipo_cozinha": "completa",
+      "cidade": "Rio de Janeiro",
+      "estado": "RJ",
+      "endereco": "Rua da Assembleia, 40",
+      "ativa": true
+    }
+  ],
+
+  "categorias": [
+    { "id": "cat-cuscuz", "nome": "Cuscuz Recheado", "ordem": 1 },
+    { "id": "cat-tapiocas", "nome": "Tapiocas Artesanais", "ordem": 2 },
+    { "id": "cat-bebidas", "nome": "Bebidas Regionais", "ordem": 3 },
+    { "id": "cat-junino", "nome": "Especiais Juninos", "ordem": 4 }
+  ],
+
+  "produtos": [
+    {
+      "id": "prod-001",
+      "categoria_id": "cat-cuscuz",
+      "nome": "Cuscuz com Carne de Sol e Queijo Coalho",
+      "descricao": "Cuscuz de milho floculado no vapor, carne de sol desfiada e queijo coalho tostado na chapa.",
+      "preco": 24.5,
+      "imagem": "/assets/produtos/cuscuz-carne-sol.jpg",
+      "sazonal": false,
+      "unidades_disponiveis": ["rec-01", "rec-02", "rio-01"],
+      "opcoes_customizacao": [
+        { "item": "Manteiga de garrafa extra", "preco_adicional": 3.0 },
+        { "item": "Sem cebola", "preco_adicional": 0.0 }
+      ]
+    },
+    {
+      "id": "prod-002",
+      "categoria_id": "cat-tapiocas",
+      "nome": "Tapioca de Queijo Coalho com Melaço",
+      "descricao": "Goma de tapioca hidratada recheada com queijo coalho artesanal e fio de melaço de cana.",
+      "preco": 18.0,
+      "imagem": "/assets/produtos/tapioca-coalho.jpg",
+      "sazonal": false,
+      "unidades_disponiveis": ["rec-01", "rio-01"],
+      "opcoes_customizacao": []
+    },
+    {
+      "id": "prod-003",
+      "categoria_id": "cat-bebidas",
+      "nome": "Café Coado na Hora",
+      "descricao": "Café torrado regional passado individualmente na mesa em coador de pano.",
+      "preco": 6.5,
+      "imagem": "/assets/produtos/cafe-coado.jpg",
+      "sazonal": false,
+      "unidades_disponiveis": ["rec-01", "rec-02", "rio-01"],
+      "opcoes_customizacao": [{ "item": "Com leite", "preco_adicional": 2.0 }]
+    },
+    {
+      "id": "prod-004",
+      "categoria_id": "cat-junino",
+      "nome": "Bolo de Macaxeira com Coco",
+      "descricao": "Receita tradicional nordestina, textura cremosa e queijo ralado tostado.",
+      "preco": 14.0,
+      "imagem": "/assets/produtos/bolo-macaxeira.jpg",
+      "sazonal": true,
+      "periodo_sazonal": "junho-julho",
+      "unidades_disponiveis": ["rec-01"],
+      "opcoes_customizacao": []
+    }
+  ],
+
+  "cupons": [
+    {
+      "codigo": "RAIZES10",
+      "tipo": "percentual",
+      "valor": 10,
+      "valor_minimo": 20.0,
+      "ativo": true
+    },
+    {
+      "codigo": "NORDESTE5",
+      "tipo": "fixo",
+      "valor": 5.0,
+      "valor_minimo": 15.0,
+      "ativo": true
+    }
+  ],
+
+  "formas_pagamento": [
+    {
+      "id": "pix",
+      "nome": "PIX Instantâneo",
+      "ativo": true,
+      "requer_dados_cartao": false
+    },
+    {
+      "id": "cartao_credito",
+      "nome": "Cartão de Crédito",
+      "ativo": true,
+      "requer_dados_cartao": true
+    },
+    {
+      "id": "cartao_debito",
+      "nome": "Cartão de Débito",
+      "ativo": true,
+      "requer_dados_cartao": true
+    }
+  ],
+
+  "pedidos_exemplo": [
+    {
+      "id": "ped-101",
+      "numero_chamada": "NUM001",
+      "unidade_id": "rec-01",
+      "modalidade": "pick-up",
+      "data_hora": "2026-11-05T08:30:00Z",
+      "status": "em_preparo",
+      "cliente": {
+        "nome": "Visitante",
+        "cpf": null,
+        "identificado_fidelidade": false
+      },
+      "itens": [
+        {
+          "produto_id": "prod-001",
+          "nome": "Cuscuz com Carne de Sol e Queijo Coalho",
+          "quantidade": 1,
+          "preco_unitario": 24.5,
+          "observacoes": "Sem cebola"
+        }
+      ],
+      "pagamento": {
+        "metodo": "pix",
+        "subtotal": 24.5,
+        "desconto": 0.0,
+        "total": 24.5,
+        "status_gateway": "aprovado"
+      }
+    }
+  ]
+}

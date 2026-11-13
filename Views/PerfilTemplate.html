@@ -1,0 +1,113 @@
+<div>
+  <!-- Deslogado -->
+  <div v-if="!store.usuarioLogado" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mt-4">
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 bg-gray-100 rounded-full mx-auto flex items-center justify-center text-gray-400 mb-3">
+        <span class="material-symbols-outlined text-3xl">person</span>
+      </div>
+      <h2 class="text-xl font-bold text-brand-dark">Acesse sua Conta</h2>
+      <p class="text-xs text-gray-500 mt-1">Faça login para salvar seus pedidos e cupons.</p>
+    </div>
+
+    <form @submit.prevent="store.fazerLogin" class="space-y-4">
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-gray-600">Nome ou Apelido</label>
+        <input v-model="store.formLogin.nome" required type="text" placeholder="Como quer ser chamado?"
+          class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-brand-primary focus:outline-none">
+      </div>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-gray-600">E-mail</label>
+        <input v-model="store.formLogin.email" required type="email" placeholder="seu@email.com"
+          class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-brand-primary focus:outline-none">
+      </div>
+      <button type="submit"
+        class="w-full bg-brand-primary hover:bg-brand-dark text-white font-bold py-3 rounded-lg transition-colors text-sm">
+        Entrar
+      </button>
+    </form>
+  </div>
+
+  <!-- Logado -->
+  <div v-else>
+    <div class="text-center pt-6 pb-4 relative">
+      <button @click="store.fazerLogout"
+        class="absolute top-2 right-2 text-gray-400 hover:text-red-500 flex flex-col items-center p-2 rounded-lg hover:bg-red-50 transition">
+        <span class="material-symbols-outlined text-lg">logout</span>
+        <span class="text-[10px] font-bold">Sair</span>
+      </button>
+      <div
+        class="w-20 h-20 bg-brand-light rounded-full mx-auto flex items-center justify-center text-white text-3xl font-bold mb-3 shadow-sm">
+        {{ store.usuarioLogado.nome.charAt(0).toUpperCase() }}
+      </div>
+      <h2 class="text-xl font-bold text-brand-dark">{{ store.usuarioLogado.nome }}</h2>
+      <p class="text-sm text-gray-500">{{ store.usuarioLogado.email }}</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 mt-4 overflow-hidden">
+      <div class="border-b border-gray-100">
+        <button @click="store.toggleAccordion('cupons')"
+          class="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors">
+          <div class="flex items-center gap-3 text-gray-700">
+            <span class="material-symbols-outlined text-brand-primary">local_activity</span>
+            <span class="font-semibold text-sm">Meus Cupons</span>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 transition-transform">
+            {{ store.openAccordion === 'cupons' ? 'expand_less' : 'expand_more' }}
+          </span>
+        </button>
+        <div v-show="store.openAccordion === 'cupons'" class="p-4 bg-gray-50 space-y-3 border-t border-gray-100">
+          <div v-if="!store.menuData.cupons || store.menuData.cupons.length === 0"
+            class="text-xs text-gray-500 text-center py-2">
+            Nenhum cupom disponível no momento.
+          </div>
+          <div v-for="cupom in store.menuData.cupons" :key="cupom.codigo"
+            class="bg-white p-3 rounded-lg border border-gray-200 border-l-4 border-l-brand-primary flex justify-between items-center shadow-sm">
+            <div>
+              <h5 class="font-bold text-brand-dark">{{ cupom.codigo }}</h5>
+              <p class="text-xs text-gray-500 mt-0.5">
+                Desconto de {{ cupom.tipo === 'percentual' ? cupom.valor + '%' : 'R$ ' +
+                store.formatarPreco(cupom.valor) }}
+              </p>
+            </div>
+            <div class="text-[10px] bg-brand-light/20 text-brand-dark px-2 py-1 rounded font-bold">
+              Mín. R$ {{ store.formatarPreco(cupom.valor_minimo) }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button @click="store.toggleAccordion('historico')"
+          class="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors">
+          <div class="flex items-center gap-3 text-gray-700">
+            <span class="material-symbols-outlined text-brand-primary">history</span>
+            <span class="font-semibold text-sm">Histórico de Pedidos</span>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 transition-transform">
+            {{ store.openAccordion === 'historico' ? 'expand_less' : 'expand_more' }}
+          </span>
+        </button>
+        <div v-show="store.openAccordion === 'historico'" class="p-4 bg-gray-50 space-y-3 border-t border-gray-100">
+          <div v-if="store.historicoPedidos.length === 0" class="text-xs text-gray-500 text-center py-4">
+            <span class="material-symbols-outlined text-3xl mb-1 opacity-40 block">receipt_long</span>
+            Você ainda não fez nenhum pedido.
+          </div>
+          <div v-for="pedido in store.historicoPedidos" :key="pedido.id"
+            class="bg-white p-3 rounded-lg border border-gray-200 shadow-sm">
+            <div class="flex justify-between items-center mb-2 border-b border-gray-100 pb-2">
+              <span class="font-bold text-xs text-brand-dark">Pedido #RN-{{ pedido.id }}</span>
+              <span class="text-[10px] text-gray-400 font-semibold">{{ pedido.data }}</span>
+            </div>
+            <ul class="text-xs text-gray-600 mb-2 space-y-1">
+              <li v-for="item in pedido.itens" :key="item.nome" class="flex gap-1">
+                <span class="font-bold text-gray-800">{{ item.quantidade }}x</span> {{ item.nome }}
+              </li>
+            </ul>
+            <div class="font-bold text-brand-primary text-sm text-right mt-2">Total: R$ {{
+              store.formatarPreco(pedido.total) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
